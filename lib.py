@@ -2,6 +2,8 @@ from unidecode import unidecode
 import re
 import logging
 from sklearn.externals import joblib
+import pandas as pd
+
 
 char_to_index = {}
 index_to_char = {}
@@ -13,7 +15,7 @@ char_size = 0
 # region Remarks Corpus
 def get_remarks_corpus(df, combined=False):
     df['text_filter'] = df['text'].apply(__extract_donald)
-    df['text_filter'] = df['text_filter'].apply(unidecode)
+    df['text_filter'] = df['text_filter'].apply(__apply_unidecode)
     df['is_donald'] = df['text_filter'].apply(__get_donald)
     df = df[df['is_donald']]  # filter out not-Donald
     if combined:
@@ -30,6 +32,13 @@ def get_remarks_corpus(df, combined=False):
 
 # TODO: test to catch 'Applause and Laughter.'
 # region Remarks Helpers
+def __apply_unidecode(lists):
+    out = []
+    for statement in lists:
+        out.append(unidecode(statement))
+    return out
+
+
 def __extract_donald(text):
     # Split and rejoin to remove special whitespace characters
     text = text.split()
