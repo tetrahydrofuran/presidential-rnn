@@ -1,11 +1,13 @@
 from unidecode import unidecode
 import re
 import logging
+import numpy as np
 from sklearn.externals import joblib
 import datetime
 import string
 
 
+characters = None
 char_to_index = None
 index_to_char = None
 data_size = None
@@ -119,7 +121,9 @@ def map_corpus(corpus, sprintable=True):
         characters = set(string.printable + '<>')
     else:
         characters = set(corpus + '<>')
+    characters = sorted(list(characters))
 
+    global characters
     global char_to_index
     global index_to_char
     global data_size
@@ -138,7 +142,45 @@ def sample(preds, temperature=1.0):
 
 
 def gen_x_y(text, false_y=False):
-    pass
+    chars = set(char_to_index.keys())
+    char_indices = char_to_index
+    indices_char = index_to_char
+    sentences = list()
+    next_chars = list()
+    step = 3
+
+    # Add start and end characters
+    text = re.sub('<', ' ', text)
+    text = re.sub('>', ' ', text)
+    text = '<' + text + '>>>>>>>>>>>>'
+
+    text = map(lambda x: x.lower(), text)
+    text = map(lambda x: x if x in chars else ' ', text)
+    text = ''.join(text)
+
+    if false_y:
+        # Add a padding character, so which will become the Y
+        text +=' '
+    else:
+        # Replace multiple whitespaces with a single whitespace
+        text = re.sub(r'\s+', ' ', text)
+
+
+    # Cut the text in semi-redundant sequences of maxlen characters
+    for index in range(0, len(text) - window_len, step):
+        sentences.append(text[index: index + window_len])
+        next_chars.append(text[index + window_len])
+
+    # Convert all sequences into X and Y matrices
+    x = np.zeros((len(sentences), window_len))
+    y = np.zeros((len(sentences), len(chars)), dtype=bool)
+
+    for index, sentence in enumerate(sentences):
+        for t, char in enumerate(sentence):
+            x[index, t] = char_indices[char]
+        y[index, char_indices[next_chars[index]]] = 1
+
+    return x, y
 
 
 # region Getters and Setters
