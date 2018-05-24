@@ -36,7 +36,6 @@ def get_remarks_corpus(df, combined=False):
         return corpus
 
 
-# TODO: test to catch 'Applause and Laughter.'
 # region Remarks Helpers
 def __apply_unidecode(lists):
     out = []
@@ -59,7 +58,7 @@ def __extract_donald(text):
 
 
 def __filter_annotations(text):
-    text = re.sub(r'\(\w+\.?\)', '', text)  # eg (Applause.), (Laughter.)
+    text = re.sub(r'\([A-Za-z0-9. ]+\)', '', text)  # eg (Applause.), (Laughter.)
     text = re.sub(r'\(In progress\)', '', text)
     return text
 
@@ -98,7 +97,6 @@ def get_tweet_corpus(df, combined=False):
         return corpus
 
 
-# TODO: start or end tokens
 def __combine_tweet_corpus(text):
     logging.debug('combine_tweet_corpus(): Concatenating text.')
     corpus = ''

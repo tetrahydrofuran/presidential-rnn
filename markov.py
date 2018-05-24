@@ -9,16 +9,22 @@ import sys
 
 
 def markov_main():
+    prep_markov_chain()
+
+
+def prep_markov_chain():
     # TODO placeholder locations
     df_tweet = joblib.load('tweets-series.pkl')
     df_remarks = joblib.load('remarks-series.pkl')
-    df_tweet.apply(__prep_tweets)
-    df_remarks.apply(__prep_remarks)
+    df_tweet = df_tweet.apply(__prep_tweets)
+    df_remarks = df_remarks.apply(__prep_remarks)
     ft_remarks = __generate_freq_table(df_remarks)
     ft_tweets = __generate_freq_table(df_tweet)
 
     joblib.dump(ft_remarks, 'ft_remarks.pkl')
     joblib.dump(ft_tweets, 'ft_tweets.pkl')
+    ft_remarks.to_csv('ft_remarks.csv')
+    ft_tweets.to_csv('ft_tweets.csv')
 
 
 def __generate_freq_table(text_series):
@@ -38,8 +44,8 @@ def __generate_freq_table(text_series):
     def update_progress(progress):
         """Outputs progress to stdout"""
         progress += 1
-        progress_percentage = progress / len(before) * 100
-        prog_str = f'Progress: {progress_percentage}%; Items: {progress}/{len(before)}, {time_since(start)} \n'
+        progress_percentage = 1 / len(before) * 100
+        prog_str = f'Progress: {progress_percentage}%; Items: {progress}:{len(before)}; {time_since(start)} \n'
         sys.stdout.write(prog_str)
         sys.stdout.flush()
         return progress
@@ -84,11 +90,17 @@ def __generate_freq_table(text_series):
 
         # Remove each instance of word until none remain, at which point ValueError will be thrown
         # Progress will update, and will continue to the next word
+        # I know this nested try except and intended exception throwing is kind of janky, but it does the job
         try:
             while True:
-                before.remove(individual_word)
-        except ValueError:
-            progress = update_progress(progress)
+                index_to_remove = before.index(individual_word)
+                before.pop(index_to_remove)
+                after.pop(index_to_remove)
+        except (ValueError, IndexError):
+            try:
+                progress = update_progress(progress)
+            except ZeroDivisionError:
+                continue
             continue
 
     return pd.DataFrame(frequency_table)
@@ -98,9 +110,6 @@ def __prep_tweets(text):
     text = unidecode(text)
     text = re.sub(r'\n', ' ', text)
 
-    # Insert start tokens
-    #    text = re.sub(r'<', ' ', text)
-    #    text = '<' + text
     text = text.strip()
     text = re.sub(r'https?:[A-Za-z.\/0-9]+', '', text)  # remove hyperlinks
     text = re.sub(r'--', ' ', text)  # remove double dash
@@ -122,6 +131,7 @@ def __prep_tweets(text):
 
 def __prep_remarks(text):
     text = ' '.join(text)
+    text = unidecode(text)
     text = re.sub(r'\.', ' .', text)  # space before periods
     text = re.sub(r',', ' ,', text)  # spaces before commas
     text = re.sub(r'[^ A-Za-z0-9.,]', '', text)  # other punctuation
