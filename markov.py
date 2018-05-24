@@ -5,6 +5,7 @@ import time
 from collections import Counter
 import numpy as np
 import pandas as pd
+import sys
 
 
 def markov_main():
@@ -21,14 +22,31 @@ def markov_main():
 
 
 def __generate_freq_table(text_series):
+    """
+    Really slow implementation of creating a frequency table for a Markov chain.
+    :param text_series: List of documents to 'train' Markov on
+    :type text_series: pandas Series, list, or equivalent
+    :return: pandas DataFrame of frequency distribution table
+    """
     def time_since(since):
+        """Simple timer"""
         s = time.time() - since
         m = s // 60
         s -= m * 60
         return '%dm %ds' % (m, s)
 
+    def update_progress(progress):
+        """Outputs progress to stdout"""
+        progress += 1
+        progress_percentage = progress / len(before) * 100
+        prog_str = f'Progress: {progress_percentage}%; Items: {progress}/{len(before)}, {time_since(start)} \n'
+        sys.stdout.write(prog_str)
+        sys.stdout.flush()
+        return progress
+
     start = time.time()
 
+    # Generate list of words and their matching following word
     before = []
     after = []
     for text in text_series:
@@ -36,8 +54,11 @@ def __generate_freq_table(text_series):
         before += tokens[:-1]
         after += tokens[1:]
 
+    # Init frequency_table and progress counter
     frequency_table = {}
     progress = 0
+
+    # While there are still words in the 'before' list, find all the words in the 'after' list that correspond
     while before:
         individual_word = before[0]
         same_word = []
@@ -45,6 +66,7 @@ def __generate_freq_table(text_series):
             if individual_word == word:
                 same_word.append(after[index])
 
+        # Obtain counts of each 'after' word
         word_counter = Counter(same_word)
         words = []
         counts = []
@@ -52,19 +74,23 @@ def __generate_freq_table(text_series):
         for item in list(word_counter.items()):
             words.append(item[0])
             counts.append(item[1])
+
+        # Determine frequency of each 'after' word, add to frequency_table
         counts = np.divide(counts, sum(counts))  # probability
         frequency_table[before[0]] = {
             'words': words,
             'probs': counts
         }
 
+        # Remove each instance of word until none remain, at which point ValueError will be thrown
+        # Progress will update, and will continue to the next word
         try:
             while True:
                 before.remove(individual_word)
         except ValueError:
-            progress += 1
-            print('Progress: ', progress, len(before), progress / len(before) * 100, '%', time_since(start))
+            progress = update_progress(progress)
             continue
+
     return pd.DataFrame(frequency_table)
 
 
@@ -82,6 +108,7 @@ def __prep_tweets(text):
     text = re.sub('\.\.\.\.?', '', text)  # remove ellipses
     text = re.sub(r'^\.', '', text)  # remove start periods
     text = re.sub(r'[^ A-Za-z0-9.,]', '', text)  # other punctuation
+    text = re.sub(r',', ' ,', text)  # spaces before commas
     text = re.sub(r'\.', ' .', text)  # space before periods
 
     # normalize ish
@@ -94,7 +121,11 @@ def __prep_tweets(text):
 
 
 def __prep_remarks(text):
-    return ' '.join(text)
+    text = ' '.join(text)
+    text = re.sub(r'\.', ' .', text)  # space before periods
+    text = re.sub(r',', ' ,', text)  # spaces before commas
+    text = re.sub(r'[^ A-Za-z0-9.,]', '', text)  # other punctuation
+    return text
 
 
 if __name__ == '__main__':
