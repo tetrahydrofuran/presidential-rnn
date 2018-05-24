@@ -2,11 +2,16 @@ import lib
 import pandas as pd
 from sklearn.externals import joblib
 import logging
+import model
 
 
 def main():
-    extract(reprocess=False, corpus=True)
-    extract(reprocess=False, corpus=False)
+    # Param setup
+    lib.set_pred_len(140)
+    lib.set_window(40)
+
+    series, corpus = extract(reprocess=False, corpus=True)
+    transform(series, corpus)
 
 
 def extract(reprocess=True, corpus=True):
@@ -32,7 +37,8 @@ def extract(reprocess=True, corpus=True):
     return dfc, combined
 
 
-def transform():
+def transform(series, corpus):
+    lib.map_corpus(corpus, sprintable=True)
     pass
 
 

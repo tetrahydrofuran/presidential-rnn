@@ -2,13 +2,17 @@ from unidecode import unidecode
 import re
 import logging
 from sklearn.externals import joblib
-import pandas as pd
+import datetime
+import string
 
 
-char_to_index = {}
-index_to_char = {}
-data_size = 0
-char_size = 0
+char_to_index = None
+index_to_char = None
+data_size = None
+char_size = None
+batch_name = None
+window_len = None
+predict_len = None
 
 
 # region Corpus Preparation
@@ -102,14 +106,19 @@ def __combine_tweet_corpus(text):
 # endregion
 
 
-def map_corpus(corpus):
+def map_corpus(corpus, sprintable=True):
     """
     Creates set of characters, and creates mapping of unique characters to integer and inverse, assigned
     to global scope
     :param corpus:
+    :param sprintable:
     :return:
     """
-    characters = list(set(corpus))
+
+    if sprintable:
+        characters = set(string.printable + '<>')
+    else:
+        characters = set(corpus + '<>')
 
     global char_to_index
     global index_to_char
@@ -122,3 +131,36 @@ def map_corpus(corpus):
     index_to_char = {i: ch for i, ch in enumerate(characters)}
     logging.debug('map_corpus(): Data size: ' + str(data_size))
     logging.debug('map_corpus(): Char size: ' + str(char_size))
+
+
+def sample(preds, temperature=1.0):
+    pass
+
+
+def gen_x_y(text, false_y=False):
+    pass
+
+
+# region Getters and Setters
+def get_input_target(text, false_y):
+    pass
+
+
+def get_batch():
+    global batch_name
+    if batch_name is None:
+        logging.info('Batch name not yet set. Setting batch name.')
+        batch_name = str(datetime.datetime.utcnow()).replace(' ', '_').replace('/', '_').replace(':', '_')
+        logging.info('Batch name: {}'.format(batch_name))
+    return batch_name
+
+
+def set_window(length):
+    global window_len
+    window_len = length
+
+
+def set_pred_len(length):
+    global predict_len
+    predict_len = length
+# endregion
