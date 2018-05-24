@@ -85,6 +85,7 @@ def __combine_remark_corpus(text):
 # region Tweets Corpus
 def get_tweet_corpus(df, combined=False):
     df = df[df['is_retweet'] == 'false']
+    df = __clean_tweet_corpus(df)
     if combined:
         corpus = __combine_tweet_corpus(df['text'])
         logging.debug('get_tweet_corpus(): Dumping to tweets.pkl')
@@ -104,6 +105,15 @@ def __combine_tweet_corpus(text):
     for words in text:
         corpus += words + ' '
     return corpus
+
+
+def __clean_tweet_corpus(df):
+    """Some items inputted incorrectly"""
+    bad = []
+    for i, text in enumerate(df['text']):
+        if ',false,' in text:
+            bad.append(i)
+    return df.drop(bad)
 # endregion
 # endregion
 
