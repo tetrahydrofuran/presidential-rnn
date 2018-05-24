@@ -40,7 +40,7 @@ def extract(reprocess=True, corpus=True):
 def transform(series, corpus):
     lib.map_corpus(corpus, sprintable=True)
     pass
-
+    # TODO Tensorboard callback
 
 if __name__ == "__main__":
     main()

@@ -16,7 +16,7 @@ class SentenceGenerator(keras.callbacks.Callback):
         # Reference variables
         sentence_agg = list()
 
-        seed_chars = '<Hillary Clinton.>'[:lib.window_len]
+        seed_chars = '<Hillary Clinton>'[:lib.window_len]
 
         for diversity in [0.2, 0.5, 1.0, 1.2]:
 
@@ -25,7 +25,7 @@ class SentenceGenerator(keras.callbacks.Callback):
             generated += sentence
 
             # Generate next characters, using a rolling window
-            for next_char_index in range(lib.get_conf('pred_length')):
+            for next_char_index in range(lib.predict_len):
                 x_pred, text_y = lib.gen_x_y(sentence, false_y=True)
 
                 preds = self.model.predict(x_pred, verbose=0)[-1]
