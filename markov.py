@@ -9,6 +9,7 @@ import sys
 
 
 def markov_main():
+    # TODO if os.path.isfile etc.
     prep_markov_chain()
 
 
@@ -18,12 +19,13 @@ def prep_markov_chain():
     df_remarks = joblib.load('remarks-series.pkl')
     df_tweet = df_tweet.apply(__prep_tweets)
     df_remarks = df_remarks.apply(__prep_remarks)
-    ft_remarks = __generate_freq_table(df_remarks)
-    ft_tweets = __generate_freq_table(df_tweet)
 
+    ft_remarks = __generate_freq_table(df_remarks)
     joblib.dump(ft_remarks, 'ft_remarks.pkl')
-    joblib.dump(ft_tweets, 'ft_tweets.pkl')
     ft_remarks.to_csv('ft_remarks.csv')
+
+    ft_tweets = __generate_freq_table(df_tweet)
+    joblib.dump(ft_tweets, 'ft_tweets.pkl')
     ft_tweets.to_csv('ft_tweets.csv')
 
 
@@ -44,13 +46,20 @@ def __generate_freq_table(text_series):
     def update_progress(progress):
         """Outputs progress to stdout"""
         progress += 1
-        progress_percentage = 1 / len(before) * 100
+        progress_percentage = og_length / len(before) * 100
         prog_str = f'Progress: {progress_percentage}%; Items: {progress}:{len(before)}; {time_since(start)} \n'
         sys.stdout.write(prog_str)
         sys.stdout.flush()
         return progress
 
+    def checkpoint_progress():
+        end = str(progress) + '.pkl'
+        joblib.dump(after, 'after' + end)
+        joblib.dump(before, 'before' + end)
+        joblib.dump(frequency_table, 'freq' + end)
+
     start = time.time()
+
 
     # Generate list of words and their matching following word
     before = []
@@ -60,6 +69,7 @@ def __generate_freq_table(text_series):
         before += tokens[:-1]
         after += tokens[1:]
 
+    og_length = len(after)
     # Init frequency_table and progress counter
     frequency_table = {}
     progress = 0
@@ -99,11 +109,14 @@ def __generate_freq_table(text_series):
         except (ValueError, IndexError):
             try:
                 progress = update_progress(progress)
+                if progress % 50 == 0:
+                    checkpoint_progress()
+
             except ZeroDivisionError:
                 continue
             continue
 
-    return pd.DataFrame(frequency_table)
+    return pd.DataFrame.from_dict(frequency_table, orient='index').reset_index()
 
 
 def __prep_tweets(text):

@@ -15,6 +15,9 @@ char_size = None
 batch_name = None
 window_len = None
 predict_len = None
+is_test = None
+batch_size = None
+num_epochs = None
 
 
 # region Corpus Preparation
@@ -111,7 +114,7 @@ def __clean_tweet_corpus(df):
     for i, text in enumerate(df['text']):
         if ',false,' in text:
             bad.append(i)
-    return df.drop(bad)
+    return df.reset_index().drop(bad)
 # endregion
 # endregion
 
@@ -125,17 +128,17 @@ def map_corpus(corpus, sprintable=True):
     :return:
     """
 
-    if sprintable:
-        characters = set(string.printable + '<>')
-    else:
-        characters = set(corpus + '<>')
-    characters = sorted(list(characters))
-
     global characters
     global char_to_index
     global index_to_char
     global data_size
     global char_size
+
+    if sprintable:
+        characters = set(string.printable + '<>')
+    else:
+        characters = set(corpus + '<>')
+    characters = sorted(list(characters))
 
     data_size = len(corpus)
     char_size = len(characters)
@@ -149,7 +152,7 @@ def sample(preds, temperature=1.0):
     pass
 
 
-def gen_x_y(text, false_y=False):
+def get_input_target(text, false_y=False):
     chars = set(char_to_index.keys())
     char_indices = char_to_index
     indices_char = index_to_char
@@ -192,10 +195,6 @@ def gen_x_y(text, false_y=False):
 
 
 # region Getters and Setters
-def get_input_target(text, false_y):
-    pass
-
-
 def get_batch():
     global batch_name
     if batch_name is None:
@@ -213,4 +212,17 @@ def set_window(length):
 def set_pred_len(length):
     global predict_len
     predict_len = length
+
+
+def set_test(test):
+    global is_test
+    is_test = test
+
+
+def set_model_params(batch, epochs):
+    global batch_size
+    global num_epochs
+    batch_size = batch
+    num_epochs = epochs
+
 # endregion

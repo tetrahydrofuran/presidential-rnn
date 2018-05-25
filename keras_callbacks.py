@@ -26,7 +26,7 @@ class SentenceGenerator(keras.callbacks.Callback):
 
             # Generate next characters, using a rolling window
             for next_char_index in range(lib.predict_len):
-                x_pred, text_y = lib.gen_x_y(sentence, false_y=True)
+                x_pred, text_y = lib.get_input_target(sentence, false_y=True)
 
                 preds = self.model.predict(x_pred, verbose=0)[-1]
 
