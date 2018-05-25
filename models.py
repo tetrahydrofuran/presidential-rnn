@@ -1,9 +1,8 @@
 from keras.optimizers import Adam
 from keras import Model
-from keras.layers import GRU, Dense, Input, Lambda, Bidirectional
+from keras.layers import GRU, Dense, Input, Lambda, Bidirectional, Flatten
 import keras.backend as K
 import numpy as np
-# TODO fill out names
 
 
 def __init_shared_layers(X, y):
@@ -68,7 +67,7 @@ def double_rnn_hidden_elu(X, y, bidirectional=False):
     # Network architecture
     x = x_ohe(seq_input)
     gru1 = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
-    gru2 = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
+    gru2 = Flatten()(GRU(units=256, dropout=0.2, recurrent_dropout=0.2))
     if bidirectional:
         x = Bidirectional(gru1(x))
         x = Bidirectional(gru2(x))

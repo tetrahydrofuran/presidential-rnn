@@ -6,11 +6,66 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 import sys
+import logging
 
 
 def markov_main():
+    logging.basicConfig(level=logging.DEBUG)
     # TODO if os.path.isfile etc.
-    prep_markov_chain()
+    ft = joblib.load('../data/markov/ft_remarks.pkl')
+    ft2 = joblib.load('../data/markov/ft_tweets.pkl')
+#    seed = ['.', 'Hillary', 'China', 'America', 'Democrats', 'Republicans', 'USA', 'Russia', 'FBI', 'Obama',
+#            'Healthcare', 'Immigration', 'DACA', 'Fake', 'Media', 'Failing']
+    seed = ['Muslims', 'Iran', 'Iraq', 'Mexico', 'NAFTA', 'Loser']
+    # generate_sentences(seed, ft, ft2)
+    print(generate_paragraph('', ft, words=250))
+    print(generate_paragraph('', ft2, words=250))
+
+
+def generate_sentences(seed, ft, ft2):
+    for word in seed:
+        logging.debug(word)
+        print('Remarks')
+        for i in range(10):
+            try:
+                print(markov_sentence(word, ft))
+            except IndexError:
+                continue
+        print('Tweets')
+        for i in range(10):
+            try:
+                print(markov_sentence(word, ft2))
+            except IndexError:
+                continue
+
+
+def generate_paragraph(seed, ft, words=100):
+    def select_word(previous):
+        row = ft[ft['index'] == previous]
+        decision = list(np.random.multinomial(1, row['probs'].iloc[0]))
+        next_word = row['words'].iloc[0][decision.index(1)].strip()
+        return next_word
+
+    sentence = seed
+    next_word = select_word(seed)
+
+    for i in range(words):
+        if next_word == ',' or next_word == '.':
+            sentence += next_word
+        else:
+            sentence += ' ' + next_word
+
+        previous_word = next_word
+        next_word = select_word(previous_word)
+
+        # Guard for double punctuation
+        while previous_word == ',' and (next_word == '.' or next_word == ','):
+            next_word = select_word(previous_word)
+        # Guard clause for some badly cleaned tweets
+        while ',false' in next_word:
+            return sentence + '.'
+
+    return sentence
 
 
 def prep_markov_chain():
@@ -27,6 +82,52 @@ def prep_markov_chain():
     ft_tweets = __generate_freq_table(df_tweet)
     joblib.dump(ft_tweets, 'ft_tweets.pkl')
     ft_tweets.to_csv('ft_tweets.csv')
+
+
+def markov_sentence(seed, freq_table):
+    def select_word(previous):
+        row = freq_table[freq_table['index'] == previous]
+        decision = list(np.random.multinomial(1, row['probs'].iloc[0]))
+        next_word = row['words'].iloc[0][decision.index(1)].strip()
+        return next_word
+
+    sentence = seed
+    next_word = select_word(seed)
+
+    while next_word != '.':
+        if next_word == ',':
+            sentence += next_word
+        else:
+            sentence += ' ' + next_word
+
+        previous_word = next_word
+        next_word = select_word(previous_word)
+
+        # Guard for double punctuation
+        while previous_word == ',' and (next_word == '.' or next_word == ','):
+            next_word = select_word(previous_word)
+        # Guard clause for some badly cleaned tweets
+        while ',false' in next_word:
+            return sentence + '.'
+
+    return sentence + '.'
+
+
+# Has unresolved bug with repeating input
+def markov_sentence_recursive(sentence, seed, freq_table):
+
+    if sentence == '' or seed == ',':
+        sentence += seed
+    else:
+        sentence = ' ' + seed
+    row = freq_table[freq_table['index'] == seed]
+    decision = list(np.random.multinomial(1, row['probs'].iloc[0]))
+    next_word = row['words'].iloc[0][decision.index(1)].strip()
+    if next_word == '.':
+        return sentence.strip() + '.'
+
+    sentence = sentence + markov_sentence(sentence, next_word)
+    return sentence
 
 
 def __generate_freq_table(text_series):
@@ -59,7 +160,6 @@ def __generate_freq_table(text_series):
         joblib.dump(frequency_table, 'freq' + end)
 
     start = time.time()
-
 
     # Generate list of words and their matching following word
     before = []

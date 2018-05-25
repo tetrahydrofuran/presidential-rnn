@@ -112,7 +112,7 @@ def __clean_tweet_corpus(df):
     """Some items inputted incorrectly"""
     bad = []
     for i, text in enumerate(df['text']):
-        if ',false,' in text:
+        if ',false' in text:
             bad.append(i)
     return df.reset_index().drop(bad)
 # endregion
@@ -149,7 +149,13 @@ def map_corpus(corpus, sprintable=True):
 
 
 def sample(preds, temperature=1.0):
-    pass
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+
+    return np.argmax(probas)
 
 
 def get_input_target(text, false_y=False):
@@ -175,7 +181,6 @@ def get_input_target(text, false_y=False):
     else:
         # Replace multiple whitespaces with a single whitespace
         text = re.sub(r'\s+', ' ', text)
-
 
     # Cut the text in semi-redundant sequences of maxlen characters
     for index in range(0, len(text) - window_len, step):

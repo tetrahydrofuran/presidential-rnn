@@ -16,7 +16,7 @@ class SentenceGenerator(keras.callbacks.Callback):
         # Reference variables
         sentence_agg = list()
 
-        seed_chars = '<Hillary Clinton>'[:lib.window_len]
+        seed_chars = '<Today, it was my great honor to present the #MedalOfHonor to>'[:lib.window_len]
 
         for diversity in [0.2, 0.5, 1.0, 1.2]:
 
