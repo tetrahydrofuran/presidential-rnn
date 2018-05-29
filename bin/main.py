@@ -26,12 +26,10 @@ def main():
     #
     # model(x, y, 0, False, 'rnn_basic_tweet_unidirectional')
     # model(x, y, 1, False, 'rnn_hidden_elu_tweet_unidirectional')
-    # # model(x, y, 2, False, 'double_rnn_tweet_unidirectional')
     # model(x, y, 3, False, 'rnn_flanked_elu_tweet_unidirectional')
     #
     # model(x, y, 0, True, 'rnn_basic_tweet_bidirectional')
     # model(x, y, 1, True, 'rnn_hidden_elu_tweet_bidirectional')
-    # # model(x, y, 2, True, 'double_rnn_tweet_bidirectional')
     # model(x, y, 3, True, 'rnn_flanked_elu_tweet_bidirectional')
 
     # series = joblib.load('../data/clean/remarks-series.pkl')
@@ -40,12 +38,10 @@ def main():
 
     # model(x, y, 0, False, 'rnn_basic_remarks_unidirectional')
     # model(x, y, 1, False, 'rnn_hidden_elu_remarks_unidirectional')
-    # # model(x, y, 2, False, 'double_rnn_remarks_unidirectional')
     # model(x, y, 3, False, 'rnn_flanked_elu_remarks_unidirectional')
     #
     # model(x, y, 0, True, 'rnn_basic_remarks_bidirectional')
     # model(x, y, 1, True, 'rnn_hidden_elu_remarks_bidirectional')
-    # # model(x, y, 2, True, 'double_rnn_remarks_bidirectional')
     # model(x, y, 3, True, 'rnn_flanked_elu_remarks_bidirectional')
 
 
@@ -103,8 +99,6 @@ def model(x, y, model_index, bidirectional, name):
         mod = models.rnn_basic(x, y, bidirectional)
     elif model_index == 1:
         mod = models.rnn_hidden_elu(x, y, bidirectional)
-    elif model_index == 2:
-        mod = models.double_rnn_hidden_elu(x, y, bidirectional)
     else:
         mod = models.rnn_flanked_elu(x, y, bidirectional)
 

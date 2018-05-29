@@ -62,29 +62,6 @@ def rnn_basic(X, y, bidirectional=False):
     return model
 
 
-def double_rnn_hidden_elu(X, y, bidirectional=False):
-    seq_input, x_ohe, output = __init_shared_layers(X, y)
-    # Network architecture
-    x = x_ohe(seq_input)
-    gru1 = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
-    gru2 = Flatten()(GRU(units=256, dropout=0.2, recurrent_dropout=0.2))
-    if bidirectional:
-        x = Bidirectional(gru1(x))
-        x = Bidirectional(gru2(x))
-    else:
-        x = gru1(x)
-        x = gru2(x)
-
-    x = Dense(units=512, activation='elu')(x)
-    x = output(x)
-
-    opt = Adam(lr=0.01)
-    model = Model(seq_input, x)
-    model.compile(optimizer=opt, loss='categorical_crossentropy')
-
-    return model
-
-
 def rnn_flanked_elu(X, y, bidirectional=False):
     seq_input, x_ohe, output = __init_shared_layers(X, y)
 
