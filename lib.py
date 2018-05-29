@@ -144,6 +144,10 @@ def map_corpus(corpus, sprintable=True):
     char_size = len(characters)
     char_to_index = {ch: i for i, ch in enumerate(characters)}
     index_to_char = {i: ch for i, ch in enumerate(characters)}
+
+    joblib.dump(char_to_index, 'char_to_index.pkl')
+    joblib.dump(index_to_char, 'index_to_char.pkl')
+
     logging.debug('map_corpus(): Data size: ' + str(data_size))
     logging.debug('map_corpus(): Char size: ' + str(char_size))
 
@@ -169,7 +173,7 @@ def get_input_target(text, false_y=False):
     # Add start and end characters
     text = re.sub('<', ' ', text)
     text = re.sub('>', ' ', text)
-    text = '<' + text + '>>>>>>>>>>>>'
+    # text = '<' + text + '>>>>>>>>>>>>'
 
     text = map(lambda x: x.lower(), text)
     text = map(lambda x: x if x in chars else ' ', text)

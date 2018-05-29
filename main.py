@@ -34,9 +34,9 @@ def main():
     # # model(x, y, 2, True, 'double_rnn_tweet_bidirectional')
     # model(x, y, 3, True, 'rnn_flanked_elu_tweet_bidirectional')
 
-    series = joblib.load('../data/clean/remarks-series.pkl')
-    corpus = lib.__combine_remark_corpus(series)
-    x, y = transform(series, corpus, remarks=True)
+    # series = joblib.load('../data/clean/remarks-series.pkl')
+    # corpus = lib.__combine_remark_corpus(series)
+    # x, y = transform(series, corpus, remarks=True)
 
     # model(x, y, 0, False, 'rnn_basic_remarks_unidirectional')
     # model(x, y, 1, False, 'rnn_hidden_elu_remarks_unidirectional')

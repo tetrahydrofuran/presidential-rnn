@@ -95,7 +95,7 @@ class SGAN():
             # region Discriminator Training
             chunk = self.random_chunk(text=corpus, chunksize=50)
             real = chunk[-self.gen_length:]
-
+            # TODO need to convert chunks into numbers via get input target probably
             # Generate
             # noise = np.random.normal(0, 1, (batch_size, self.output_len))
             gen_input = chunk[:self.gen_length]
