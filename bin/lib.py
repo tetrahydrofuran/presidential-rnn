@@ -6,7 +6,7 @@ from sklearn.externals import joblib
 import datetime
 import string
 
-
+# region Global settings variables
 characters = None
 char_to_index = None
 index_to_char = None
@@ -18,11 +18,13 @@ predict_len = None
 is_test = None
 batch_size = None
 num_epochs = None
+# endregion
 
 
 # region Corpus Preparation
 # region Remarks Corpus
 def get_remarks_corpus(df, combined=False):
+    """Prepares presidential remarks"""
     df['text_filter'] = df['text'].apply(__extract_donald)
     df['text_filter'] = df['text_filter'].apply(__apply_unidecode)
     df['is_donald'] = df['text_filter'].apply(__get_donald)
@@ -41,6 +43,7 @@ def get_remarks_corpus(df, combined=False):
 
 # region Remarks Helpers
 def __apply_unidecode(lists):
+    """Filters unidecode"""
     out = []
     for statement in lists:
         out.append(unidecode(statement))
@@ -48,6 +51,7 @@ def __apply_unidecode(lists):
 
 
 def __extract_donald(text):
+    """Removes remarks that do not involve the President."""
     # Split and rejoin to remove special whitespace characters
     text = text.split()
     text = ' '.join(text)
@@ -61,18 +65,21 @@ def __extract_donald(text):
 
 
 def __filter_annotations(text):
+    """Removes nonverbal annotations."""
     text = re.sub(r'\([A-Za-z0-9. ]+\)', '', text)  # eg (Applause.), (Laughter.)
     text = re.sub(r'\(In progress\)', '', text)
     return text
 
 
 def __get_donald(lists):
+    """Removes simple retweets that were not original words by Donald."""
     if lists:  # Empty list means no Donald
         return True
     return False
 
 
 def __combine_remark_corpus(text):
+    """Combines corpus."""
     logging.debug('combine_remark_corpus(): Concatenating text.')
     corpus = ''
     for speech in text:
@@ -86,6 +93,7 @@ def __combine_remark_corpus(text):
 
 # region Tweets Corpus
 def get_tweet_corpus(df, combined=False):
+    """Creates Tweet corpus."""
     df = df[df['is_retweet'] == 'false']
     df = __clean_tweet_corpus(df)
     if combined:
@@ -101,6 +109,7 @@ def get_tweet_corpus(df, combined=False):
 
 
 def __combine_tweet_corpus(text):
+    """Combines corpus."""
     logging.debug('combine_tweet_corpus(): Concatenating text.')
     corpus = ''
     for words in text:
@@ -123,8 +132,8 @@ def map_corpus(corpus, sprintable=True):
     """
     Creates set of characters, and creates mapping of unique characters to integer and inverse, assigned
     to global scope
-    :param corpus:
-    :param sprintable:
+    :param corpus: Corpus to be trained on
+    :param sprintable: Limit to string-printable characters or just unidecode
     :return:
     """
 
@@ -153,6 +162,7 @@ def map_corpus(corpus, sprintable=True):
 
 
 def sample(preds, temperature=1.0):
+    """Sample model with given temperature"""
     preds = np.asarray(preds).astype('float64')
     preds = np.log(preds) / temperature
     exp_preds = np.exp(preds)
@@ -163,6 +173,7 @@ def sample(preds, temperature=1.0):
 
 
 def get_input_target(text, false_y=False):
+    """Generates training input and target characters."""
     chars = set(char_to_index.keys())
     char_indices = char_to_index
     indices_char = index_to_char
@@ -170,10 +181,6 @@ def get_input_target(text, false_y=False):
     next_chars = list()
     step = 3
 
-    # Add start and end characters
-    text = re.sub('<', ' ', text)
-    text = re.sub('>', ' ', text)
-    # text = '<' + text + '>>>>>>>>>>>>'
 
     text = map(lambda x: x.lower(), text)
     text = map(lambda x: x if x in chars else ' ', text)
@@ -205,6 +212,7 @@ def get_input_target(text, false_y=False):
 
 # region Getters and Setters
 def get_batch():
+    """Get or obtain batch name."""
     global batch_name
     if batch_name is None:
         logging.info('Batch name not yet set. Setting batch name.')
@@ -214,21 +222,25 @@ def get_batch():
 
 
 def set_window(length):
+    """Set window size."""
     global window_len
     window_len = length
 
 
 def set_pred_len(length):
+    """Set prediction length."""
     global predict_len
     predict_len = length
 
 
 def set_test(test):
+    """Set test-run parameter."""
     global is_test
     is_test = test
 
 
 def set_model_params(batch, epochs):
+    """Set batch size and epochs."""
     global batch_size
     global num_epochs
     batch_size = batch

@@ -2,6 +2,8 @@
 Attempted implementation of Semi-Supervised GAN
 https://github.com/eriklindernoren/Keras-GAN/blob/master/sgan/sgan.py
 
+Nonfunctional
+
 Semi-Supervised Learning with Generative Adversarial Networks
 Augustus Odena
 https://arxiv.org/pdf/1606.01583.pdf
@@ -11,9 +13,8 @@ import numpy as np
 import lib
 import keras
 from keras import Model
-from keras.layers import Input, Dense, Flatten, Reshape, GRU, Conv2D, Dropout, BatchNormalization
-import keras.backend as K
-from keras.utils import to_categorical
+from keras.layers import Input, Dense, Flatten, GRU, Conv2D, Dropout, BatchNormalization
+from sklearn.externals import joblib
 
 # TODO Callbacks
 # Generate 10 characters, pass to discriminator?
@@ -127,5 +128,6 @@ class SGAN():
 
 
 if __name__ == '__main__':
+    corpus = joblib.load('../data/clean/remarks.pkl')
     model = SGAN()
-    model.train()
+    model.train(batch_size=4096, sample_interval=25, corpus=corpus)

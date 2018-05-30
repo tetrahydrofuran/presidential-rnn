@@ -18,34 +18,36 @@ def main():
     lib.set_test(True)
     lib.set_model_params(batch=4096, epochs=200)
 
-    # extract(reprocess=True, corpus=True)
-    # extract(reprocess=True, corpus=False)
-    series = joblib.load('../data/clean/tweets-series.pkl')
-    corpus = lib.__combine_tweet_corpus(series)
-    x, y = transform(series, corpus)
-    #
-    # model(x, y, 0, False, 'rnn_basic_tweet_unidirectional')
-    # model(x, y, 1, False, 'rnn_hidden_elu_tweet_unidirectional')
-    # model(x, y, 3, False, 'rnn_flanked_elu_tweet_unidirectional')
-    #
-    # model(x, y, 0, True, 'rnn_basic_tweet_bidirectional')
-    # model(x, y, 1, True, 'rnn_hidden_elu_tweet_bidirectional')
-    # model(x, y, 3, True, 'rnn_flanked_elu_tweet_bidirectional')
+    tweet_series, tweet_corpus = extract(reprocess=True, corpus=False)
+    x, y = transform(tweet_series, tweet_corpus)
 
-    # series = joblib.load('../data/clean/remarks-series.pkl')
-    # corpus = lib.__combine_remark_corpus(series)
-    # x, y = transform(series, corpus, remarks=True)
+    model(x, y, 0, False, 'rnn_basic_tweet_unidirectional')
+    model(x, y, 1, False, 'rnn_hidden_elu_tweet_unidirectional')
+    model(x, y, 3, False, 'rnn_flanked_elu_tweet_unidirectional')
 
-    # model(x, y, 0, False, 'rnn_basic_remarks_unidirectional')
-    # model(x, y, 1, False, 'rnn_hidden_elu_remarks_unidirectional')
-    # model(x, y, 3, False, 'rnn_flanked_elu_remarks_unidirectional')
-    #
-    # model(x, y, 0, True, 'rnn_basic_remarks_bidirectional')
-    # model(x, y, 1, True, 'rnn_hidden_elu_remarks_bidirectional')
-    # model(x, y, 3, True, 'rnn_flanked_elu_remarks_bidirectional')
+    model(x, y, 0, True, 'rnn_basic_tweet_bidirectional')
+    model(x, y, 1, True, 'rnn_hidden_elu_tweet_bidirectional')
+    model(x, y, 3, True, 'rnn_flanked_elu_tweet_bidirectional')
+
+    remarks_series, remarks_corpus = extract(reprocess=True, corpus=True)
+    x, y = transform(remarks_series, remarks_corpus, remarks=True)
+
+    model(x, y, 0, False, 'rnn_basic_remarks_unidirectional')
+    model(x, y, 1, False, 'rnn_hidden_elu_remarks_unidirectional')
+    model(x, y, 3, False, 'rnn_flanked_elu_remarks_unidirectional')
+
+    model(x, y, 0, True, 'rnn_basic_remarks_bidirectional')
+    model(x, y, 1, True, 'rnn_hidden_elu_remarks_bidirectional')
+    model(x, y, 3, True, 'rnn_flanked_elu_remarks_bidirectional')
 
 
 def extract(reprocess=True, corpus=True):
+    """
+    Generates corpus from scraped text.
+    :param reprocess: boolean for whether to perform processing step or not.
+    :param corpus: boolean. False corresponds to Tweets corpus
+    :return: Returns list of individual documents, and all documents combined.
+    """
     logging.debug('extract()')
     if reprocess:
         if corpus:
@@ -69,6 +71,7 @@ def extract(reprocess=True, corpus=True):
 
 
 def transform(series, corpus, remarks=False):
+    """Converts corpus to be ready for model."""
     lib.map_corpus(corpus, sprintable=True)
     x_agg = list()
     y_agg = list()
@@ -92,6 +95,7 @@ def transform(series, corpus, remarks=False):
 
 
 def model(x, y, model_index, bidirectional, name):
+    """Select and train model. Dumps model at end of training."""
     sys.stdout.write('Training model ' + name + '\n')
     sys.stdout.flush()
 

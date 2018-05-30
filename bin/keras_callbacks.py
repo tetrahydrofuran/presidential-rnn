@@ -4,6 +4,9 @@ import lib
 
 
 class SentenceGenerator(keras.callbacks.Callback):
+    """
+    Generates sample sentence at the end of each epoch.
+    """
 
     def __init__(self, output_path=None, verbose=0):
         super(SentenceGenerator, self).__init__()

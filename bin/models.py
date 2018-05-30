@@ -1,6 +1,6 @@
 from keras.optimizers import Adam
 from keras import Model
-from keras.layers import GRU, Dense, Input, Lambda, Bidirectional, Flatten
+from keras.layers import GRU, Dense, Input, Lambda, Bidirectional
 import keras.backend as K
 import numpy as np
 
@@ -30,7 +30,7 @@ def rnn_hidden_elu(X, y, bidirectional=False):
     x = x_ohe(seq_input)
     gru = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
     if bidirectional:
-        x = Bidirectional(gru(x))
+        x = Bidirectional(gru)(x)
     else:
         x = gru(x)
 
@@ -50,7 +50,7 @@ def rnn_basic(X, y, bidirectional=False):
     x = x_ohe(seq_input)
     gru = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
     if bidirectional:
-        x = Bidirectional(gru(x))
+        x = Bidirectional(gru)(x)
     else:
         x = gru(x)
 
@@ -69,7 +69,7 @@ def rnn_flanked_elu(X, y, bidirectional=False):
     x = Dense(units=256, activation='elu')(x)
     gru = GRU(units=256, dropout=0.2, recurrent_dropout=0.2)
     if bidirectional:
-        x = Bidirectional(gru(x))
+        x = Bidirectional(gru)(x)
     else:
         x = gru(x)
 

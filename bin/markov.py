@@ -6,25 +6,24 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 import sys
-import logging
 
 
 def markov_main():
-    logging.basicConfig(level=logging.DEBUG)
+    """Loads frequency table and generates Markov samples"""
     # TODO if os.path.isfile etc.
     ft = joblib.load('../data/markov/ft_remarks.pkl')
     ft2 = joblib.load('../data/markov/ft_tweets.pkl')
 #    seed = ['.', 'Hillary', 'China', 'America', 'Democrats', 'Republicans', 'USA', 'Russia', 'FBI', 'Obama',
 #            'Healthcare', 'Immigration', 'DACA', 'Fake', 'Media', 'Failing']
     seed = ['Muslims', 'Iran', 'Iraq', 'Mexico', 'NAFTA', 'Loser']
-    # generate_sentences(seed, ft, ft2)
-    print(generate_paragraph('', ft, words=250))
-    print(generate_paragraph('', ft2, words=250))
+    generate_sentences(seed, ft, ft2)
+    #print(generate_paragraph('', ft, words=250))
+    #print(generate_paragraph('', ft2, words=250))
 
 
 def generate_sentences(seed, ft, ft2):
+    """Wrapper for sentence generation."""
     for word in seed:
-        logging.debug(word)
         print('Remarks')
         for i in range(10):
             try:
@@ -40,6 +39,7 @@ def generate_sentences(seed, ft, ft2):
 
 
 def generate_paragraph(seed, ft, words=100):
+    """Generates number of specified words given seed and frequency table."""
     def select_word(previous):
         row = ft[ft['index'] == previous]
         decision = list(np.random.multinomial(1, row['probs'].iloc[0]))
@@ -69,9 +69,9 @@ def generate_paragraph(seed, ft, words=100):
 
 
 def prep_markov_chain():
-    # TODO placeholder locations
-    df_tweet = joblib.load('tweets-series.pkl')
-    df_remarks = joblib.load('remarks-series.pkl')
+    """Wrapper for creating frequency tables based on each corpus"""
+    df_tweet = joblib.load('../data/clean/tweets-series.pkl')
+    df_remarks = joblib.load('../data/clean/remarks-series.pkl')
     df_tweet = df_tweet.apply(__prep_tweets)
     df_remarks = df_remarks.apply(__prep_remarks)
 
@@ -85,6 +85,7 @@ def prep_markov_chain():
 
 
 def markov_sentence(seed, freq_table):
+    """Creates sentence given seed and frequency table"""
     def select_word(previous):
         row = freq_table[freq_table['index'] == previous]
         decision = list(np.random.multinomial(1, row['probs'].iloc[0]))
@@ -115,6 +116,10 @@ def markov_sentence(seed, freq_table):
 
 # Has unresolved bug with repeating input
 def markov_sentence_recursive(sentence, seed, freq_table):
+    """
+    First attempt at Markov sentence generation using a recursive function.
+    Has unresolved bug with repeating input.
+    """
 
     if sentence == '' or seed == ',':
         sentence += seed
@@ -220,6 +225,7 @@ def __generate_freq_table(text_series):
 
 
 def __prep_tweets(text):
+    """Tweet normalization for Markov chain"""
     text = unidecode(text)
     text = re.sub(r'\n', ' ', text)
 
@@ -243,6 +249,7 @@ def __prep_tweets(text):
 
 
 def __prep_remarks(text):
+    """Remarks normalization for Markov chain"""
     text = ' '.join(text)
     text = unidecode(text)
     text = re.sub(r'\.', ' .', text)  # space before periods
