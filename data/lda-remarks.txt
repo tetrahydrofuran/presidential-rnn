@@ -7,8 +7,16 @@ Modeled topics at  3
 Modeled topics at  4
 [(0, '0.015*"thank" + 0.012*"great" + 0.011*"people" + 0.010*"want" + 0.008*"know" + 0.008*"going" + 0.006*"just" + 0.006*"ve" + 0.005*"veterans" + 0.005*"right"'), (1, '0.019*"going" + 0.012*"people" + 0.011*"great" + 0.011*"thank" + 0.011*"tax" + 0.010*"american" + 0.010*"want" + 0.009*"country" + 0.009*"ve" + 0.008*"jobs"'), (2, '0.016*"thank" + 0.012*"people" + 0.008*"today" + 0.008*"great" + 0.007*"united" + 0.007*"world" + 0.007*"america" + 0.007*"american" + 0.006*"states" + 0.006*"nation"'), (3, '0.023*"going" + 0.020*"thank" + 0.015*"people" + 0.015*"know" + 0.015*"great" + 0.013*"think" + 0.012*"want" + 0.011*"ve" + 0.011*"ll" + 0.010*"lot"')]
 
+0. Veterans
+1. Economy and domestic
+2. Nationalism
+3. Misc
+
 Modeled topics at  5
 [(0, '0.024*"thank" + 0.015*"great" + 0.010*"people" + 0.009*"today" + 0.007*"want" + 0.007*"know" + 0.007*"america" + 0.006*"god" + 0.006*"american" + 0.006*"right"'), (1, '0.027*"going" + 0.019*"thank" + 0.016*"think" + 0.016*"know" + 0.016*"great" + 0.014*"people" + 0.013*"ll" + 0.013*"lot" + 0.013*"want" + 0.012*"ve"'), (2, '0.011*"thank" + 0.010*"going" + 0.009*"president" + 0.009*"think" + 0.009*"russia" + 0.008*"ve" + 0.007*"great" + 0.007*"people" + 0.007*"know" + 0.007*"country"'), (3, '0.014*"thank" + 0.012*"united" + 0.012*"people" + 0.010*"states" + 0.008*"world" + 0.008*"great" + 0.007*"nations" + 0.006*"president" + 0.006*"today" + 0.005*"country"'), (4, '0.019*"going" + 0.015*"people" + 0.013*"thank" + 0.011*"great" + 0.011*"want" + 0.009*"know" + 0.009*"ve" + 0.009*"country" + 0.008*"american" + 0.008*"right"')]
+
+0. Religion
+1. People
 
 Modeled topics at  6
 [(0, '0.016*"american" + 0.015*"thank" + 0.014*"america" + 0.009*"great" + 0.006*"tax" + 0.006*"country" + 0.006*"today" + 0.005*"people" + 0.005*"new" + 0.005*"americans"'), (1, '0.016*"thank" + 0.014*"people" + 0.011*"great" + 0.007*"today" + 0.007*"world" + 0.007*"united" + 0.006*"america" + 0.006*"american" + 0.006*"states" + 0.006*"nation"'), (2, '0.021*"thank" + 0.014*"people" + 0.011*"going" + 0.011*"great" + 0.010*"want" + 0.008*"ve" + 0.007*"know" + 0.007*"country" + 0.007*"right" + 0.006*"just"'), (3, '0.027*"going" + 0.017*"thank" + 0.016*"people" + 0.015*"want" + 0.012*"know" + 0.012*"great" + 0.011*"think" + 0.011*"ve" + 0.011*"lot" + 0.011*"ll"'), (4, '0.015*"thank" + 0.011*"president" + 0.010*"great" + 0.009*"peace" + 0.008*"people" + 0.007*"israel" + 0.006*"today" + 0.006*"united" + 0.005*"honor" + 0.005*"states"'), (5, '0.023*"going" + 0.016*"great" + 0.015*"know" + 0.014*"people" + 0.014*"thank" + 0.012*"think" + 0.012*"ve" + 0.011*"good" + 0.010*"want" + 0.009*"ll"')]
@@ -22,8 +30,24 @@ Modeled topics at  8
 Modeled topics at  9
 [(0, '0.020*"thank" + 0.014*"people" + 0.012*"great" + 0.008*"america" + 0.007*"american" + 0.007*"today" + 0.007*"want" + 0.006*"country" + 0.006*"nation" + 0.006*"god"'), (1, '0.015*"mike" + 0.013*"jim" + 0.006*"enemy" + 0.006*"thank" + 0.006*"honor" + 0.006*"soldier" + 0.005*"god" + 0.005*"dole" + 0.004*"bob" + 0.004*"men"'), (2, '0.018*"going" + 0.014*"thank" + 0.013*"american" + 0.012*"great" + 0.009*"america" + 0.009*"jobs" + 0.009*"want" + 0.009*"country" + 0.008*"people" + 0.007*"ve"'), (3, '0.026*"going" + 0.021*"thank" + 0.018*"people" + 0.015*"think" + 0.014*"want" + 0.014*"know" + 0.014*"great" + 0.013*"ll" + 0.012*"ve" + 0.011*"lot"'), (4, '0.009*"statement" + 0.006*"people" + 0.006*"country" + 0.006*"group" + 0.006*"excuse" + 0.005*"infrastructure" + 0.005*"want" + 0.005*"facts" + 0.005*"know" + 0.004*"sweden"'), (5, '0.017*"great" + 0.013*"team" + 0.013*"right" + 0.012*"coach" + 0.011*"know" + 0.009*"thank" + 0.008*"good" + 0.007*"game" + 0.006*"incredible" + 0.006*"season"'), (6, '0.005*"kirstjen" + 0.005*"today" + 0.005*"great" + 0.005*"remember" + 0.004*"jewish" + 0.004*"evil" + 0.004*"security" + 0.004*"homeland" + 0.004*"world" + 0.003*"people"'), (7, '0.018*"united" + 0.015*"states" + 0.013*"thank" + 0.011*"president" + 0.010*"world" + 0.010*"people" + 0.010*"nations" + 0.009*"trade" + 0.009*"korea" + 0.009*"great"'), (8, '0.025*"going" + 0.018*"know" + 0.016*"people" + 0.014*"great" + 0.012*"tax" + 0.011*"want" + 0.011*"ve" + 0.011*"said" + 0.011*"don" + 0.010*"lot"')]
 
+0. Nationalism
+1. Veterans
+2. Jobs and domestic
+3.
+
+
 Modeled topics at  10
 [(0, '0.029*"going" + 0.019*"people" + 0.017*"know" + 0.014*"want" + 0.013*"think" + 0.012*"don" + 0.012*"ve" + 0.011*"great" + 0.010*"lot" + 0.010*"thank"'), (1, '0.027*"thank" + 0.022*"veterans" + 0.014*"va" + 0.011*"great" + 0.006*"want" + 0.006*"today" + 0.006*"right" + 0.006*"job" + 0.006*"just" + 0.005*"police"'), (2, '0.011*"going" + 0.011*"thank" + 0.011*"people" + 0.010*"tax" + 0.010*"want" + 0.009*"great" + 0.009*"american" + 0.008*"country" + 0.008*"america" + 0.007*"right"'), (3, '0.024*"thank" + 0.013*"great" + 0.013*"people" + 0.008*"today" + 0.008*"america" + 0.007*"american" + 0.007*"god" + 0.007*"want" + 0.007*"nation" + 0.006*"know"'), (4, '0.012*"energy" + 0.011*"thank" + 0.008*"america" + 0.008*"american" + 0.007*"united" + 0.007*"states" + 0.007*"jim" + 0.006*"country" + 0.006*"right" + 0.005*"jobs"'), (5, '0.013*"united" + 0.012*"thank" + 0.012*"people" + 0.011*"states" + 0.009*"world" + 0.009*"nations" + 0.009*"great" + 0.008*"president" + 0.006*"today" + 0.006*"peace"'), (6, '0.024*"thank" + 0.021*"going" + 0.019*"great" + 0.011*"tax" + 0.011*"mr" + 0.010*"want" + 0.010*"ve" + 0.010*"people" + 0.010*"american" + 0.010*"know"'), (7, '0.017*"going" + 0.016*"trade" + 0.015*"thank" + 0.014*"great" + 0.013*"ll" + 0.012*"ve" + 0.012*"think" + 0.010*"know" + 0.010*"lot" + 0.010*"states"'), (8, '0.023*"thank" + 0.018*"going" + 0.015*"people" + 0.014*"ll" + 0.014*"think" + 0.013*"great" + 0.011*"want" + 0.011*"know" + 0.010*"ve" + 0.009*"lot"'), (9, '0.000*"people" + 0.000*"going" + 0.000*"thank" + 0.000*"great" + 0.000*"want" + 0.000*"right" + 0.000*"country" + 0.000*"ve" + 0.000*"know" + 0.000*"think"')]
+
+1: Military, law enforcement
+2: Great America
+3. America + Religion
+4. American jobs
+5. American foreign policy
+6. American economy
+7. Trade
+8. Think
+9. ?
 
 Modeled topics at  11
 [(0, '0.018*"thank" + 0.016*"great" + 0.014*"people" + 0.012*"president" + 0.012*"united" + 0.010*"states" + 0.007*"know" + 0.006*"want" + 0.005*"mr" + 0.005*"today"'), (1, '0.016*"thank" + 0.010*"people" + 0.009*"great" + 0.009*"united" + 0.008*"states" + 0.007*"world" + 0.007*"today" + 0.007*"american" + 0.007*"america" + 0.007*"country"'), (2, '0.021*"going" + 0.014*"tax" + 0.014*"people" + 0.011*"great" + 0.011*"american" + 0.010*"want" + 0.010*"country" + 0.009*"ve" + 0.009*"thank" + 0.009*"jobs"'), (3, '0.029*"drug" + 0.012*"opioid" + 0.012*"addiction" + 0.012*"drugs" + 0.008*"people" + 0.008*"crisis" + 0.007*"going" + 0.006*"mr" + 0.005*"epidemic" + 0.005*"overdose"'), (4, '0.014*"thank" + 0.013*"people" + 0.012*"god" + 0.008*"nation" + 0.008*"faith" + 0.007*"today" + 0.006*"great" + 0.006*"america" + 0.006*"world" + 0.006*"freedom"'), (5, '0.014*"thank" + 0.012*"energy" + 0.012*"america" + 0.011*"great" + 0.011*"american" + 0.007*"united" + 0.007*"states" + 0.006*"people" + 0.006*"world" + 0.006*"country"'), (6, '0.025*"thank" + 0.019*"going" + 0.017*"people" + 0.017*"great" + 0.015*"want" + 0.015*"know" + 0.012*"right" + 0.011*"really" + 0.010*"just" + 0.010*"job"'), (7, '0.019*"thank" + 0.010*"great" + 0.009*"today" + 0.008*"people" + 0.007*"america" + 0.007*"god" + 0.006*"american" + 0.006*"police" + 0.006*"right" + 0.006*"nation"'), (8, '0.015*"thank" + 0.014*"people" + 0.010*"korea" + 0.007*"today" + 0.007*"north" + 0.007*"korean" + 0.006*"american" + 0.006*"great" + 0.006*"south" + 0.005*"time"'), (9, '0.026*"going" + 0.017*"know" + 0.015*"people" + 0.014*"think" + 0.012*"want" + 0.012*"don" + 0.012*"ve" + 0.011*"ll" + 0.011*"great" + 0.011*"good"'), (10, '0.029*"thank" + 0.022*"going" + 0.019*"great" + 0.013*"think" + 0.013*"ll" + 0.013*"people" + 0.012*"lot" + 0.012*"ve" + 0.012*"know" + 0.010*"want"')]
