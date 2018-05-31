@@ -2,12 +2,37 @@ from sklearn.externals import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 from gensim.models import LdaModel
 from gensim import matutils
+from yellowbrick.text import FreqDistVisualizer
+from yellowbrick.features import PCADecomposition
+from yellowbrick import set_palette
+from sklearn.cluster import DBSCAN
+
+
+def dbscan_pca(corpus):
+    set_palette('sns_deep')  # set visible colors
+    cv = CountVectorizer(stop_words='english', token_pattern="\\b[a-z][a-z]+\\b")
+    vec = cv.fit_transform(corpus).toarray()
+    db = DBSCAN(eps=0.15, min_samples=10)
+    clusters = db.fit(PCADecomposition(scale=False).fit_transform(vec))
+    visualizer = PCADecomposition(scale=False, color=clusters)
+    visualizer.fit_transform(vec)
+    visualizer.poof()
+
+
+def token_frequency_plot(corpus, n_features):
+    """Generates plot of most common tokens"""
+    corpus_vectorizer = CountVectorizer(ngram_range=(1, 2), stop_words='english', token_pattern="\\b[a-z][a-z]+\\b")
+    doc_matrix = corpus_vectorizer.fit_transform(corpus)
+    features = corpus_vectorizer.get_feature_names()
+    viz = FreqDistVisualizer(features=features, n=n_features)
+    viz.fit_transform(doc_matrix)
+    viz.poof()
 
 
 def perform_lda_iterations(num_topics, num_passes):
     """Performs LDA on up to a specified number of topics with a specified number of passes."""
-    tw = joblib.load('tweets-series.pkl')
-    rm = joblib.load('remarks-series.pkl')
+    tw = joblib.load('../data/clean/tweets-series.pkl')
+    rm = joblib.load('../data/clean/remarks-series.pkl')
 
     rm = rm.apply(__unlist)
     tcv = CountVectorizer(stop_words='english', token_pattern="\\b[a-z][a-z]+\\b")
@@ -34,6 +59,7 @@ def perform_lda_iterations(num_topics, num_passes):
 
 
 def __unlist(lists):
+    """Collapses remarks corpus into a series of strings"""
     text = ''
     for statement in lists:
         text += statement + ' '

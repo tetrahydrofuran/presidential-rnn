@@ -6,19 +6,22 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 import sys
+import os
 
 
 def markov_main():
     """Loads frequency table and generates Markov samples"""
-    # TODO if os.path.isfile etc.
-    ft = joblib.load('../data/markov/ft_remarks.pkl')
-    ft2 = joblib.load('../data/markov/ft_tweets.pkl')
-#    seed = ['.', 'Hillary', 'China', 'America', 'Democrats', 'Republicans', 'USA', 'Russia', 'FBI', 'Obama',
-#            'Healthcare', 'Immigration', 'DACA', 'Fake', 'Media', 'Failing']
-    seed = ['Muslims', 'Iran', 'Iraq', 'Mexico', 'NAFTA', 'Loser']
-    generate_sentences(seed, ft, ft2)
-    #print(generate_paragraph('', ft, words=250))
-    #print(generate_paragraph('', ft2, words=250))
+
+    # Loads or preps frequency table
+    if not (os.path.isfile('../data/markov/ft_remarks.pkl') and os.path.isfile('../data/markov/ft_tweets.pkl')):
+        prep_markov_chain()
+    ft_remarks = joblib.load('../data/markov/ft_remarks.pkl')
+    ft_tweets = joblib.load('../data/markov/ft_tweets.pkl')
+
+    seed = ['.', 'Hillary', 'China', 'America', 'Democrats', 'Republicans', 'USA', 'Russia', 'FBI', 'Obama',
+            'Healthcare', 'Immigration', 'DACA', 'Fake', 'Media', 'Failing', 'Muslims', 'Iran', 'Iraq', 'Mexico',
+            'NAFTA', 'Loser']
+    generate_sentences(seed, ft_remarks, ft_tweets)
 
 
 def generate_sentences(seed, ft, ft2):
